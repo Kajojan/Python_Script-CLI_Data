@@ -1,13 +1,15 @@
 import unittest
 import os
 import sys
-sys.path.append('../../')
+
+sys.path.append("../../")
 
 from main.db.data_loader import data_loader
 from main.db.db_manager import DB_manager
 
 
 class TestMyModule(unittest.TestCase):
+
     def setUp(self):
         self.loader_manager = data_loader()
 
@@ -15,20 +17,28 @@ class TestMyModule(unittest.TestCase):
         with self.assertRaises("FileNotFound"):
             self.loader_manager.file_load("file")
 
-    def test_load_files(self):
-        result_csv = self.loader_manager.file_load("./fake_data/test_file.csv")
-        result_json = self.loader_manager.file_load("./fake_data/test_file.json")
-        result_mxl = self.loader_manager.file_load("./fake_data/test_file.mxl")
+    def test_load_files_json(self):
+        result_json = self.loader_manager.file_load("test/db/fake_data/test_file.json")
 
         expected_result = [{"Name": "John", "Age": 30}]
+        self.assertEqual(result_json, expected_result)
+
+    def test_load_files_csv(self):
+        result_csv = self.loader_manager.file_load("test/db/fake_data/test_file.csv")
+
+        expected_result = [{"Name": "John", "Age": '30'}]
 
         self.assertEqual(result_csv, expected_result)
-        self.assertEqual(result_json, expected_result)
+
+    def test_load_files_xml(self):
+        result_mxl = self.loader_manager.file_load("test/db/fake_data/test_file.xml")
+        expected_result = [{"Name": "John", "Age": '30'}]
+    
         self.assertEqual(result_mxl, expected_result)
 
     def test_validation_number(self):
         result_csv = self.loader_manager.number(
-            self.loader_manager.file_load("./fake_data/test_file_validation.csv")
+            self.loader_manager.file_load("test/db/fake_data/test_file_validation.csv")
         )
         result = [
             {
@@ -72,7 +82,7 @@ class TestMyModule(unittest.TestCase):
 
     def test_validation_email(self):
         result_csv = self.loader_manager.email(
-            self.loader_manager.file_load("./fake_data/test_file_validation.csv")
+            self.loader_manager.file_load("test/db/fake_data/test_file_validation.csv")
         )
         result = [
             {
@@ -90,7 +100,7 @@ class TestMyModule(unittest.TestCase):
 
     def test_validation(self):
         result_csv = self.loader_manager.validation(
-            self.loader_manager.file_load("./fake_data/test_file_validation.csv")
+            self.loader_manager.file_load("test/db/fake_data/test_file_validation.csv")
         )
         result = [
             {
