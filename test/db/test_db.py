@@ -9,7 +9,6 @@ from main.db.db_manager import DB_manager
 
 
 class TestMyModule(unittest.TestCase):
-
     def setUp(self):
         self.loader_manager = data_loader()
 
@@ -26,54 +25,50 @@ class TestMyModule(unittest.TestCase):
     def test_load_files_csv(self):
         result_csv = self.loader_manager.file_load("test/db/fake_data/test_file.csv")
 
-        expected_result = [{"Name": "John", "Age": '30'}]
+        expected_result = [{"Name": "John", "Age": "30"}]
 
         self.assertEqual(result_csv, expected_result)
 
     def test_load_files_xml(self):
         result_mxl = self.loader_manager.file_load("test/db/fake_data/test_file.xml")
-        expected_result = [{"Name": "John", "Age": '30'}]
-    
+        expected_result = [{"Name": "John", "Age": "30"}]
+
         self.assertEqual(result_mxl, expected_result)
 
     def test_validation_number(self):
         result_csv = self.loader_manager.number(
-            self.loader_manager.file_load("test/db/fake_data/test_file_validation.csv")
+            self.loader_manager.file_load("test/db/fake_data/test_file validation.csv")
         )
         result = [
-            {
-                "firstname": "John",
-                "telephone_number": "123456789",
-                "email": "alice@example.com",
-            },
             {
                 "firstname": "Alice",
                 "telephone_number": "123456789",
                 "email": "@example.com",
             },
             {
-                "firstname": "Eva",
-                "telephone_number": "+48213456789",
-                "email": "john@.com",
+                "firstname": "Alice",
+                "telephone_number": "123456789",
+                "email": "@example.com",
             },
+            {"firstname": "Eva", "telephone_number": "213456789", "email": "john@.com"},
             {
                 "firstname": "John",
-                "telephone_number": "00132456789",
-                "email": "eva@example.com",
+                "telephone_number": "132456789",
+                "email": "@eva@example.com",
             },
             {
                 "firstname": "Eva",
-                "telephone_number": "555-123-457",
+                "telephone_number": "555123457",
                 "email": "michael@example.",
             },
             {
                 "firstname": "Michael",
-                "telephone_number": "(48) 124356789",
+                "telephone_number": "124356789",
                 "email": "david@example.com",
             },
             {
                 "firstname": "David",
-                "telephone_number": "123 465 789",
+                "telephone_number": "123465789",
                 "email": "david@example.com",
             },
         ]
@@ -82,9 +77,14 @@ class TestMyModule(unittest.TestCase):
 
     def test_validation_email(self):
         result_csv = self.loader_manager.email(
-            self.loader_manager.file_load("test/db/fake_data/test_file_validation.csv")
+            self.loader_manager.file_load("test/db/fake_data/test_file validation.csv")
         )
         result = [
+            {
+                "firstname": "Michael",
+                "telephone_number": "(48) 124356789",
+                "email": "david@example.com",
+            },
             {
                 "firstname": "David",
                 "telephone_number": "123 465 789",
@@ -96,13 +96,19 @@ class TestMyModule(unittest.TestCase):
                 "email": "david2@example.com",
             },
         ]
+
         self.assertEqual(result_csv, result)
 
     def test_validation(self):
         result_csv = self.loader_manager.validation(
-            self.loader_manager.file_load("test/db/fake_data/test_file_validation.csv")
+            self.loader_manager.file_load("test/db/fake_data/test_file validation.csv")
         )
         result = [
+             {
+                "firstname": "Michael",
+                "telephone_number": "124356789",
+                "email": "david@example.com",
+            },
             {
                 "firstname": "David",
                 "telephone_number": "123465789",

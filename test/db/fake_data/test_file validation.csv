@@ -1,9 +1,9 @@
 firstname;telephone_number;email
-John;;john@example.com
-John;123456789;alice@example.com
+John;;@example.com
+Alice;123456789;@example.com
 Alice;123456789;@example.com
 Eva;+48213456789;john@.com
-John;00132456789;eva@example.com
+John;00132456789;@eva@example.com
 Eva;555-123-457;michael@example.
 Michael;(48) 124356789;david@example.com
 David;123 465 789;david@example.com
