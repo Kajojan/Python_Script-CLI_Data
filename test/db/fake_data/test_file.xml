@@ -1,6 +1,1 @@
-<data>
-  <user>
-    <Name>John</Name>
-    <Age>30</Age>
-  </user>
-</data>
+<users><user><firstname>Russell</firstname><telephone_number>+48817730653</telephone_number><email>jwilliams@example.com</email><password>4^8(Oj52C+</password><role>admin</role><created_at>2023-05-15 21:57:02</created_at><children><child><name>Rebecca</name><age>11</age></child><child><name>Christie</name><age>17</age></child></children></user></users>

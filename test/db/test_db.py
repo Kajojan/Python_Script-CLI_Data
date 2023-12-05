@@ -19,19 +19,52 @@ class TestMyModule(unittest.TestCase):
     def test_load_files_json(self):
         result_json = self.loader_manager.file_load("test/db/fake_data/test_file.json")
 
-        expected_result = [{"Name": "John", "Age": 30}]
+        expected_result = [
+            {
+                "firstname": "Justin",
+                "telephone_number": "678762794",
+                "email": "opoole@example.org",
+                "password": "+3t)mSM6xX",
+                "role": "admin",
+                "created_at": "2022-11-25 02:19:37",
+                "children": [],
+            }
+        ]
         self.assertEqual(result_json, expected_result)
 
     def test_load_files_csv(self):
         result_csv = self.loader_manager.file_load("test/db/fake_data/test_file.csv")
-
-        expected_result = [{"Name": "John", "Age": "30"}]
+        expected_result = [
+            {
+                "firstname": "Don",
+                "telephone_number": "612660796",
+                "email": "tamara37@example.com",
+                "password": "jQ66IIlR*1",
+                "role": "user",
+                "created_at": "2023-08-23 23:27:09",
+                "children": [
+                    {"name": "Michael", "age": 12},
+                    {"name": "Theresa", "age": 6},
+                    {"name": "Judith", "age": 1},
+                ],
+            }
+        ]
 
         self.assertEqual(result_csv, expected_result)
 
     def test_load_files_xml(self):
         result_mxl = self.loader_manager.file_load("test/db/fake_data/test_file.xml")
-        expected_result = [{"Name": "John", "Age": "30"}]
+        expected_result = [
+            {
+                "firstname": "Russell",
+                "telephone_number": "+48817730653",
+                "email": "jwilliams@example.com",
+                "password": "4^8(Oj52C+",
+                "role": "admin",
+                "created_at": "2023-05-15 21:57:02",
+                "children": None,
+            }
+        ]
 
         self.assertEqual(result_mxl, expected_result)
 
@@ -120,7 +153,6 @@ class TestMyModule(unittest.TestCase):
     def test_create_db(self):
         db_path = "./db.sqlite3"
         dataBase = DB_manager()
-        dataBase.remove(db_path)
 
         dataBase.create_db(db_path)
 

@@ -1,5 +1,9 @@
 [{
-    "Name": "John",
-    "Age": 30
-  }
-]
+  "firstname": "Justin",
+  "telephone_number": "678762794",
+  "email": "opoole@example.org",
+  "password": "+3t)mSM6xX",
+  "role": "admin",
+  "created_at": "2022-11-25 02:19:37",
+  "children": []
+}]
