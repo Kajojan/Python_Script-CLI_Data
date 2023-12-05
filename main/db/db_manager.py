@@ -104,6 +104,38 @@ class DB_manager:
 
         return results
 
+    def get_from_databse_by_number( self, number):
+        self.cursor.execute(
+            """
+            SELECT Users.id, Users.firstname, Users.telephone_number, Users.email, Users.role, Users.created_at,
+                   Children.id AS child_id, Children.name AS child_name, Children.age AS child_age
+            FROM Users 
+            LEFT JOIN Children ON Users.id = Children.user_id
+            WHERE Users.telephone_number = ?
+        """,
+            (number,),
+        )
+
+        results = self.to_json(self.cursor.fetchall())
+
+        return results
+    
+    def get_from_databse_by_email( self, email):
+        self.cursor.execute(
+            """
+            SELECT Users.id, Users.firstname, Users.telephone_number, Users.email, Users.role, Users.created_at,
+                   Children.id AS child_id, Children.name AS child_name, Children.age AS child_age
+            FROM Users 
+            LEFT JOIN Children ON Users.id = Children.user_id
+            WHERE Users.email = ?
+        """,
+            (email,),
+        )
+
+        results = self.to_json(self.cursor.fetchall())
+
+        return results
+
     def closeDb(self):
         self.conn.close()
 
