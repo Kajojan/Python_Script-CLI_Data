@@ -21,18 +21,21 @@ class DB:
         data = self.load_manager.file_load(path)
         valid_data = self.load_manager.validation(data)
         self.dataBase.add_to_database(valid_data)
-    
-    def get_data_by_telefone_number(self,number):
+
+    def get_data_by_telefone_number(self, number):
         return self.dataBase.get_from_databse_by_number(number)
 
-    def get_password(self,email_number):
+    def get_password(self, email_number):
         return self.dataBase.get_password(email_number)
-    
-    def get_data_by_email(self,email):
+
+    def get_data_by_email(self, email):
         return self.dataBase.get_from_databse_by_email(email)
 
     def get_data_by_id(self, user_id):
-        return self.dataBase.get_from_database_by_id(user_id)
+        return self.dataBase.get_from_databse_by_id(user_id)
+
+    def get_data(self):
+        return self.dataBase.get_data_from_database()
 
     def delete_data_by_id(self, user_id):
         return self.dataBase.remove_from_database(user_id)

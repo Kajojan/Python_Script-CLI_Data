@@ -1,5 +1,8 @@
 import datetime
 import sqlite3
+import json
+
+from sqlalchemy import Null
 from main.db.data_loader import *
 import bcrypt
 
@@ -42,7 +45,7 @@ class DB_manager:
 
         self.conn.commit()
 
-    def add_to_database(self, data: object):
+    def add_to_database(self, data):
         for user_data in data:
             self.cursor.execute(
                 """
@@ -75,14 +78,18 @@ class DB_manager:
         self.cursor.execute(
             """
             SELECT Users.id, Users.firstname, Users.telephone_number, Users.email, Users.role, Users.created_at,
-                   Children.id AS child_id, Children.name AS child_name, Children.age AS child_age
-            FROM Users
-            LEFT JOIN Children ON Users.id = Children.user_id
+            json_group_array( json_object('name', Children.name, 'age', Children.age)) AS children
+            FROM Users 
+            LEFT JOIN
+            Children ON Users.id = Children.user_id
+            GROUP BY Users.id;
         """
         )
-        results = self.to_json(self.cursor.fetchall())
+        data = self.cursor.fetchall()
+        results = self.to_json(data)
 
         return results
+
 
     def remove_from_database(self, id):
         self.cursor.execute("DELETE FROM Users WHERE id = ?", (id,))
@@ -93,10 +100,12 @@ class DB_manager:
         self.cursor.execute(
             """
             SELECT Users.id, Users.firstname, Users.telephone_number, Users.email, Users.role, Users.created_at,
-                   Children.id AS child_id, Children.name AS child_name, Children.age AS child_age
+            json_group_array( json_object('name', Children.name, 'age', Children.age)) AS children
             FROM Users 
-            LEFT JOIN Children ON Users.id = Children.user_id
+            LEFT JOIN
+            Children ON Users.id = Children.user_id
             WHERE Users.id = ?
+            GROUP BY Users.id;
         """,
             (id,),
         )
@@ -104,39 +113,42 @@ class DB_manager:
 
         return results
 
-    def get_from_databse_by_number( self, number):
+    def get_from_databse_by_number(self, number):
         self.cursor.execute(
             """
             SELECT Users.id, Users.firstname, Users.telephone_number, Users.email, Users.role, Users.created_at,
-                   Children.id AS child_id, Children.name AS child_name, Children.age AS child_age
+            json_group_array( json_object('name', Children.name, 'age', Children.age)) AS children
             FROM Users 
-            LEFT JOIN Children ON Users.id = Children.user_id
+            LEFT JOIN
+            Children ON Users.id = Children.user_id
             WHERE Users.telephone_number = ?
+            GROUP BY Users.id;
         """,
             (number,),
         )
 
         data = self.cursor.fetchone()
-        results=None
+        results = None
         if data != None:
             results = self.to_json([data])
 
         return results
 
-    
-    def get_from_databse_by_email( self, email):
+    def get_from_databse_by_email(self, email):
         self.cursor.execute(
             """
             SELECT Users.id, Users.firstname, Users.telephone_number, Users.email, Users.role, Users.created_at,
-                   Children.id AS child_id, Children.name AS child_name, Children.age AS child_age
+            json_group_array( json_object('name', Children.name, 'age', Children.age)) AS children
             FROM Users 
-            LEFT JOIN Children ON Users.id = Children.user_id
+            LEFT JOIN
+            Children ON Users.id = Children.user_id
             WHERE Users.email = ?
+            GROUP BY Users.id;
         """,
             (email,),
         )
         data = self.cursor.fetchone()
-        results=None
+        results = None
         if data != None:
             results = self.to_json([data])
 
@@ -150,9 +162,9 @@ class DB_manager:
 
     def is_hash_password(self, password, hash_password):
         return bcrypt.checkpw(password.encode("utf-8"), hash_password)
-    
-    def get_password(self,email_number):
-        if '@' in email_number:
+
+    def get_password(self, email_number):
+        if "@" in email_number:
             self.cursor.execute(
                 """
                 SELECT Users.password
@@ -201,9 +213,7 @@ class DB_manager:
                 email,
                 role,
                 created_at,
-                child_id,
-                child_name,
-                child_age,
+                children_json_str,
             ) = row
 
             user_dict = {
@@ -216,10 +226,9 @@ class DB_manager:
                 "children": [],
             }
 
-            if child_id:
-                user_dict["children"].append(
-                    {"id": child_id, "name": child_name, "age": child_age}
-                )
-
+            if children_json_str != '[{"name":null,"age":null}]':
+                children_list = json.loads(children_json_str)
+                user_dict["children"] = children_list
             user_list.append(user_dict)
+
         return user_list
