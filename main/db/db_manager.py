@@ -6,8 +6,13 @@ import bcrypt
 
 class DB_manager:
     def __init__(self):
-        self.connection = None
+        self.conn = None
         self.cursor = None
+
+    def connect(self,db_path: str):
+        self.conn = sqlite3.connect(db_path)
+        self.cursor = self.conn.cursor()
+        
 
     def create_db(self, db_path: str):
         self.conn = sqlite3.connect(db_path, check_same_thread=False)

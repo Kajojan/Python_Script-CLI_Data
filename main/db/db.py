@@ -1,6 +1,6 @@
 from main.db.data_loader import data_loader
 from main.db.db_manager import DB_manager
-
+import sqlite3
 
 class DB:
     def __init__(self) -> None:
@@ -9,6 +9,9 @@ class DB:
 
     def create(self, db_path):
         self.dataBase.create_db(db_path)
+
+    def connect(self, db_path):
+        self.dataBase.connect(db_path)
 
     def loda_data_and_add(self, path):
         data = self.load_manager.file_load(path)
