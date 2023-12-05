@@ -13,9 +13,9 @@ class TestMyModule(unittest.TestCase):
         self.loader_manager = data_loader()
 
     def test_load_file_not_found(self):
-        with self.assertRaises("FileNotFound"):
+       with self.assertRaises(FileNotFoundError):
             self.loader_manager.file_load("file")
-
+            
     def test_load_files_json(self):
         result_json = self.loader_manager.file_load("test/db/fake_data/test_file.json")
 
@@ -104,7 +104,7 @@ class TestMyModule(unittest.TestCase):
             self.loader_manager.file_load("test/db/fake_data/test_file validation.csv")
         )
         result = [
-             {
+            {
                 "firstname": "Michael",
                 "telephone_number": "124356789",
                 "email": "david@example.com",
@@ -125,23 +125,98 @@ class TestMyModule(unittest.TestCase):
         self.assertTrue(os.path.exists(db_path))
         os.remove(db_path)
         self.assertFalse(os.path.exists(db_path))
+        dataBase.closeDb()
 
     def test_add_receive_delete_from_db(self):
         db_path = "./db.sqlite3"
         dataBase = DB_manager()
         dataBase.create_db(db_path)
 
-        data = {"name": "John", "age": 30}
-        dataBase.add_to_database(data)
+        data = [
+            {
+                "firstname": "Justin",
+                "telephone_number": "678762794",
+                "email": "opoole@example.org",
+                "password": "+3t)mSM6xX",
+                "role": "admin",
+                "created_at": "2022-11-25 02:19:37",
+                "children": [{"name": "Anna", "age": 18}],
+            },
+            {
+                "firstname": "Cathy",
+                "telephone_number": "(48)594885352",
+                "email": "rubengriffin@example.com",
+                "password": "Dw2Bf(Dd!q",
+                "role": "user",
+                "created_at": "2023-08-27 16:39:04",
+                "children": [],
+            },
+        ]
+        dataBase.add_to_database(self.loader_manager.validation(data))
         retrieved_data = dataBase.get_data_from_database()
+        data_expected = [
+            {
+                "id": 1,
+                "firstname": "Justin",
+                "telephone_number": "678762794",
+                "email": "opoole@example.org",
+                "role": "admin",
+                "created_at": "2022-11-25 02:19:37",
+                "children": [{"id": 1, "name": "Anna", "age": 18}],
+            },
+            {
+                "id": 2,
+                "firstname": "Cathy",
+                "telephone_number": "594885352",
+                "email": "rubengriffin@example.com",
+                "role": "user",
+                "created_at": "2023-08-27 16:39:04",
+                "children": [],
+            },
+        ]
+        self.assertEqual(data_expected, retrieved_data)
 
-        self.assertEqual(data, retrieved_data)
+        dataBase.remove_from_database(1)
+        dataBase.remove_from_database(2)
 
-        dataBase.remove_from_database(data)
         retrieved_data = dataBase.get_data_from_database()
         expectedData = []
 
         self.assertEqual(expectedData, retrieved_data)
+        dataBase.drop_db()
+
+    def test_get_from_db_by_it(self):
+        db_path = "./db.sqlite3"
+        dataBase = DB_manager()
+        dataBase.create_db(db_path)
+        data = [
+            {
+                "firstname": "Justin",
+                "telephone_number": "678762794",
+                "email": "opoole@example.org",
+                "password": "+3t)mSM6xX",
+                "role": "admin",
+                "created_at": "2022-11-25 02:19:37",
+                "children": [{"name": "Anna", "age": 18}],
+            }
+        ]
+        dataBase.add_to_database(self.loader_manager.validation(data))
+        retrieved_data = dataBase.get_from_databse_by_id(1)
+        data_expected = [
+            {
+                "id": 1,
+                "firstname": "Justin",
+                "telephone_number": "678762794",
+                "email": "opoole@example.org",
+                "role": "admin",
+                "created_at": "2022-11-25 02:19:37",
+                "children": [{"id": 1, "name": "Anna", "age": 18}],
+            }
+        ]
+        dataBase.remove_from_database(1)
+
+        dataBase.drop_db()
+        self.assertEqual(retrieved_data, data_expected)
 
 
 if __name__ == "__main__":
