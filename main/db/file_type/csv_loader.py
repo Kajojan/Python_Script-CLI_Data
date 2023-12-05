@@ -12,5 +12,4 @@ class CSV_Loader(Loder):
                 for index, value in enumerate(row):
                     data_row[headers[index]] = value
                 self.data.append(data_row)
-
         return self.data

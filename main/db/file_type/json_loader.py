@@ -5,6 +5,5 @@ import json
 class Json_Loader(Loder):
     def load(self, file) -> object:
         with open(file) as jsonfile:
-            self.data.append(json.load(jsonfile))
+            self.data = json.load(jsonfile)
         return self.data
-
