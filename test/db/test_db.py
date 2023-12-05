@@ -245,7 +245,7 @@ class TestMyModule(unittest.TestCase):
                 "email": "opoole@example.org",
                 "role": "admin",
                 "created_at": "2022-11-25 02:19:37",
-                "children": [{ "name": "Anna", "age": 18}],
+                "children": [{"name": "Anna", "age": 18}],
             }
         ]
 
