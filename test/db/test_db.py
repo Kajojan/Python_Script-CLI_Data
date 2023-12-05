@@ -279,7 +279,7 @@ class TestMyModule(unittest.TestCase):
         dataBase.add_to_database(self.loader_manager.validation(data))
         # get_by_number = dataBase.get_password("678762794")
         # get_by_emial = dataBase.get_password("opoole@example.org")
-        get_None = dataBase.get_password('123')
+        get_None = dataBase.get_password("123")
         self.assertEqual(get_None, None)
 
         dataBase.drop_db()
