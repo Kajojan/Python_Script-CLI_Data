@@ -13,9 +13,9 @@ class TestMyModule(unittest.TestCase):
         self.loader_manager = data_loader()
 
     def test_load_file_not_found(self):
-       with self.assertRaises(FileNotFoundError):
+        with self.assertRaises(FileNotFoundError):
             self.loader_manager.file_load("file")
-            
+
     def test_load_files_json(self):
         result_json = self.loader_manager.file_load("test/db/fake_data/test_file.json")
 
@@ -120,6 +120,8 @@ class TestMyModule(unittest.TestCase):
     def test_create_db(self):
         db_path = "./db.sqlite3"
         dataBase = DB_manager()
+        dataBase.remove(db_path)
+
         dataBase.create_db(db_path)
 
         self.assertTrue(os.path.exists(db_path))
@@ -128,7 +130,7 @@ class TestMyModule(unittest.TestCase):
         dataBase.closeDb()
 
     def test_add_receive_delete_from_db(self):
-        db_path = "./db.sqlite3"
+        db_path = "./test/db.sqlite3"
         dataBase = DB_manager()
         dataBase.create_db(db_path)
 
@@ -184,9 +186,10 @@ class TestMyModule(unittest.TestCase):
 
         self.assertEqual(expectedData, retrieved_data)
         dataBase.drop_db()
+        dataBase.remove(db_path)
 
     def test_get_from_db_by_it(self):
-        db_path = "./db.sqlite3"
+        db_path = "./test/db.sqlite3"
         dataBase = DB_manager()
         dataBase.create_db(db_path)
         data = [
@@ -216,6 +219,8 @@ class TestMyModule(unittest.TestCase):
         dataBase.remove_from_database(1)
 
         dataBase.drop_db()
+        dataBase.remove(db_path)
+
         self.assertEqual(retrieved_data, data_expected)
 
 

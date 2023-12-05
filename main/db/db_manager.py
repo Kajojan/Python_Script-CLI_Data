@@ -9,10 +9,9 @@ class DB_manager:
         self.conn = None
         self.cursor = None
 
-    def connect(self,db_path: str):
+    def connect(self, db_path: str):
         self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
-        
 
     def create_db(self, db_path: str):
         self.conn = sqlite3.connect(db_path, check_same_thread=False)
@@ -116,10 +115,17 @@ class DB_manager:
 
     def drop_db(self):
         self.cursor.execute("DROP TABLE IF EXISTS Users;")
-
         self.cursor.execute("DROP TABLE IF EXISTS Children;")
         self.conn.commit()
         self.conn.close()
+
+    def remove(self, path):
+        try:
+            os.remove(path)
+        except FileNotFoundError:
+            raise FileNotFoundError
+        except Exception as e:
+            raise e
 
     def to_json(self, data):
         user_list = []
