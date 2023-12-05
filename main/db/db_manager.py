@@ -90,6 +90,24 @@ class DB_manager:
 
         return results
 
+    def get_other_children(self,age,user_id):
+        self.cursor.execute(
+            """
+            SELECT Users.firstname, Users.telephone_number,
+            json_group_array( json_object('name', Children.name, 'age', Children.age)) AS children
+            FROM Users
+            JOIN Children  ON Users.id = Children.user_id
+            WHERE Users.id IN (
+                SELECT DISTINCT user_id
+                FROM Children
+                WHERE age = ? )   
+            AND Users.id != ?
+            GROUP BY Users.id;
+        """,(age, user_id, )
+        )
+        data = self.cursor.fetchall()
+
+        return data
 
     def remove_from_database(self, id):
         self.cursor.execute("DELETE FROM Users WHERE id = ?", (id,))

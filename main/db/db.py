@@ -39,7 +39,10 @@ class DB:
 
     def delete_data_by_id(self, user_id):
         return self.dataBase.remove_from_database(user_id)
-
+    
+    def get_other_children(self,age,user_id):
+        return self.dataBase.get_other_children(age,user_id)
+    
     def drop_db(self):
         self.dataBase.drop_db()
 
