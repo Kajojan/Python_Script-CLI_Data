@@ -28,8 +28,7 @@ class data_loader:
         except FileNotFoundError:
             raise FileNotFoundError(f"File not found: {path}")
         except Exception as e:
-            raise e 
-        
+            raise e
 
     def number(self, data: object):
         valid_data = []

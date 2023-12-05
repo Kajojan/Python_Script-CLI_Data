@@ -1,6 +1,7 @@
 import datetime
 import sqlite3
 from main.db.data_loader import *
+import bcrypt
 
 
 class DB_manager:
@@ -48,7 +49,7 @@ class DB_manager:
                     user_data["firstname"],
                     user_data["telephone_number"],
                     user_data["email"],
-                    user_data["password"],
+                    self.hash_password(user_data["password"]),
                     user_data["role"],
                     user_data["created_at"],
                 ),
@@ -102,8 +103,11 @@ class DB_manager:
     def closeDb(self):
         self.conn.close()
 
-    def hash_password():
-        pass
+    def hash_password(self, password):
+        return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
+    def is_hash_password(self, password, hash_password):
+        return bcrypt.checkpw(password.encode("utf-8"), hash_password)
 
     def drop_db(self):
         self.cursor.execute("DROP TABLE IF EXISTS Users;")
