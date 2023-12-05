@@ -248,12 +248,21 @@ class TestMyModule(unittest.TestCase):
                 "children": [{"id": 1, "name": "Anna", "age": 18}],
             }
         ]
+
+        email_data = dataBase.get_from_databse_by_email("opoole@example.org")
+        telephone_data = dataBase.get_from_databse_by_number("678762794")
+
+
+
+
         dataBase.remove_from_database(1)
 
         dataBase.drop_db()
         dataBase.remove(db_path)
 
         self.assertEqual(retrieved_data, data_expected)
+        self.assertEqual(email_data, data_expected)
+        self.assertEqual(telephone_data, data_expected)
 
 
 if __name__ == "__main__":
