@@ -252,9 +252,6 @@ class TestMyModule(unittest.TestCase):
         email_data = dataBase.get_from_databse_by_email("opoole@example.org")
         telephone_data = dataBase.get_from_databse_by_number("678762794")
 
-
-
-
         dataBase.remove_from_database(1)
 
         dataBase.drop_db()
@@ -263,6 +260,30 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(retrieved_data, data_expected)
         self.assertEqual(email_data, data_expected)
         self.assertEqual(telephone_data, data_expected)
+
+    def test_get_password(self):
+        db_path = "./test/db.sqlite3"
+        dataBase = DB_manager()
+        dataBase.create_db(db_path)
+        data = [
+            {
+                "firstname": "Justin",
+                "telephone_number": "678762794",
+                "email": "opoole@example.org",
+                "password": "+3t)mSM6xX",
+                "role": "admin",
+                "created_at": "2022-11-25 02:19:37",
+                "children": [{"name": "Anna", "age": 18}],
+            }
+        ]
+        dataBase.add_to_database(self.loader_manager.validation(data))
+        # get_by_number = dataBase.get_password("678762794")
+        # get_by_emial = dataBase.get_password("opoole@example.org")
+        get_None = dataBase.get_password('123')
+        self.assertEqual(get_None, None)
+
+        dataBase.drop_db()
+        dataBase.remove(db_path)
 
 
 if __name__ == "__main__":
