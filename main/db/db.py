@@ -24,6 +24,9 @@ class DB:
     
     def get_data_by_telefone_number(self,number):
         return self.dataBase.get_from_databse_by_number(number)
+
+    def get_password(self,email_number):
+        return self.dataBase.get_password(email_number)
     
     def get_data_by_email(self,email):
         return self.dataBase.get_from_databse_by_email(email)

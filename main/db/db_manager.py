@@ -116,9 +116,13 @@ class DB_manager:
             (number,),
         )
 
-        results = self.to_json(self.cursor.fetchall())
+        data = self.cursor.fetchone()
+        results=None
+        if data != None:
+            results = self.to_json([data])
 
         return results
+
     
     def get_from_databse_by_email( self, email):
         self.cursor.execute(
@@ -131,8 +135,10 @@ class DB_manager:
         """,
             (email,),
         )
-
-        results = self.to_json(self.cursor.fetchall())
+        data = self.cursor.fetchone()
+        results=None
+        if data != None:
+            results = self.to_json([data])
 
         return results
 
@@ -144,6 +150,32 @@ class DB_manager:
 
     def is_hash_password(self, password, hash_password):
         return bcrypt.checkpw(password.encode("utf-8"), hash_password)
+    
+    def get_password(self,email_number):
+        if '@' in email_number:
+            self.cursor.execute(
+                """
+                SELECT Users.password
+                FROM Users 
+                WHERE Users.email = ?
+            """,
+                (email_number,),
+            )
+        else:
+            self.cursor.execute(
+                """
+                SELECT Users.password
+                FROM Users 
+                WHERE Users.telephone_number = ?
+            """,
+                (email_number,),
+            )
+
+        data = self.cursor.fetchone()
+        if data != None:
+            return data[0]
+
+        return None
 
     def drop_db(self):
         self.cursor.execute("DROP TABLE IF EXISTS Users;")
