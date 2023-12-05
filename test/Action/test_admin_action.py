@@ -37,9 +37,12 @@ class TestMyModule(unittest.TestCase):
 
     def test_group_by_age(self):
         result = self.action.group_by_age()
-        expected_result = [{'age': 12, 'count':2},{'age': 6, 'count':2},{'age': 1, 'count':2} ]
+        expected_result = [
+            {"age": 1, "count": 2},
+            {"age": 6, "count": 2},
+            {"age": 12, "count": 2},
+        ]
         self.assertEqual(result, expected_result)
-        self.database.remove("./test/db.sqlite3")
 
 
 if __name__ == "__main__":
