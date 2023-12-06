@@ -151,19 +151,19 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(result_csv, result)
 
     def test_create_db(self):
-        db_path = "./db.sqlite3"
+        db_path = "./test/db.sqlite3"
         dataBase = DB_manager()
 
         dataBase.create_db(db_path)
 
         self.assertTrue(os.path.exists(db_path))
-        os.remove(db_path)
-        self.assertFalse(os.path.exists(db_path))
-        dataBase.closeDb()
+
+        
 
     def test_add_receive_delete_from_db(self):
         db_path = "./test/db.sqlite3"
         dataBase = DB_manager()
+        dataBase.remove(db_path)
         dataBase.create_db(db_path)
 
         data = [
@@ -218,11 +218,11 @@ class TestMyModule(unittest.TestCase):
 
         self.assertEqual(expectedData, retrieved_data)
         dataBase.drop_db()
-        dataBase.remove(db_path)
 
     def test_get_from_db_by_it(self):
         db_path = "./test/db.sqlite3"
         dataBase = DB_manager()
+        dataBase.remove(db_path)
         dataBase.create_db(db_path)
         data = [
             {
@@ -255,7 +255,6 @@ class TestMyModule(unittest.TestCase):
         dataBase.remove_from_database(1)
 
         dataBase.drop_db()
-        dataBase.remove(db_path)
 
         self.assertEqual(retrieved_data, data_expected)
         self.assertEqual(email_data, data_expected)
@@ -264,6 +263,7 @@ class TestMyModule(unittest.TestCase):
     def test_get_password(self):
         db_path = "./test/db.sqlite3"
         dataBase = DB_manager()
+        dataBase.remove(db_path)
         dataBase.create_db(db_path)
         data = [
             {
@@ -277,13 +277,15 @@ class TestMyModule(unittest.TestCase):
             }
         ]
         dataBase.add_to_database(self.loader_manager.validation(data))
-        # get_by_number = dataBase.get_password("678762794")
-        # get_by_emial = dataBase.get_password("opoole@example.org")
+        get_by_number = dataBase.get_password("678762794")
+        get_by_emial = dataBase.get_password("opoole@example.org")
         get_None = dataBase.get_password("123")
         self.assertEqual(get_None, None)
+        self.assertIsNotNone(get_by_number)
+        self.assertIsNotNone(get_by_emial)
+
 
         dataBase.drop_db()
-        dataBase.remove(db_path)
 
 
 if __name__ == "__main__":

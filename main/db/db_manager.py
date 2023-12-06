@@ -90,7 +90,7 @@ class DB_manager:
 
         return results
 
-    def get_other_children(self,age,user_id):
+    def get_other_children(self, age, user_id):
         self.cursor.execute(
             """
             SELECT Users.firstname, Users.telephone_number,
@@ -103,7 +103,11 @@ class DB_manager:
                 WHERE age = ? )   
             AND Users.id != ?
             GROUP BY Users.id;
-        """,(age, user_id, )
+        """,
+            (
+                age,
+                user_id,
+            ),
         )
         data = self.cursor.fetchall()
 
