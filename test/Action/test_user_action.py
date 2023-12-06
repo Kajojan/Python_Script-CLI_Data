@@ -15,7 +15,6 @@ class TestMyModule(unittest.TestCase):
         self.action = User(self.database, user)
 
     def test_print_children(self):
-        self.action.find_similar_childre_by_age_SQL()
         result = self.action.print_children()
         expected_result = [
             {"name": "Judith", "age": 1},
