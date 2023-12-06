@@ -158,8 +158,6 @@ class TestMyModule(unittest.TestCase):
 
         self.assertTrue(os.path.exists(db_path))
 
-        
-
     def test_add_receive_delete_from_db(self):
         db_path = "./test/db.sqlite3"
         dataBase = DB_manager()
@@ -283,7 +281,6 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(get_None, None)
         self.assertIsNotNone(get_by_number)
         self.assertIsNotNone(get_by_emial)
-
 
         dataBase.drop_db()
 
