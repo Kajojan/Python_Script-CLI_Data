@@ -1,8 +1,4 @@
 import pandas as pd
-import json
-
-from sympy import true
-
 
 class Admin:
     def __init__(self, db):

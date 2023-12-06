@@ -1,4 +1,3 @@
-from main.db.db import DB
 from main.db.data_loader import data_loader
 import bcrypt
 
