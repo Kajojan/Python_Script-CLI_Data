@@ -1,6 +1,6 @@
 import unittest
 from main.db.db import DB
-from main.actions.admin_action import Admin
+from main.actions.admin_action import Admin_action
 
 
 class TestMyModule(unittest.TestCase):
@@ -9,7 +9,7 @@ class TestMyModule(unittest.TestCase):
         self.database.remove("./test/db.sqlite3")
         self.database.create("./test/db.sqlite3")
         self.database.loda_data_and_add("./test/Action/test_csv_action.csv")
-        self.action: Admin = Admin(self.database)
+        self.action: Admin_action = Admin_action(self.database)
 
     def test_print_all_accounts(self):
         result: int = self.action.prtint_all_accounts()

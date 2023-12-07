@@ -1,15 +1,15 @@
-from typing import  Any
+from typing import Any
 
 import pandas as pd
 from pandas import DataFrame
 
+from main.actions.user_action import User_action
 from main.db.db import DB
 
 
-class Admin:
-    def __init__(self, db: DB) -> None:
-        self.dataBase: DB = db
-        self.users: list[dict] = self.dataBase.get_data()
+class Admin_action(User_action):
+    def __init__(self, db: DB, user: list) -> None:
+        super().__init__(db, user)
 
     def prtint_all_accounts(self) -> int:
         number_of_account: int = len(self.users)

@@ -1,6 +1,6 @@
 import unittest
 from main.db.db import DB
-from main.actions.user_action import User
+from main.actions.user_action import User_action
 
 
 class TestMyModule(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestMyModule(unittest.TestCase):
         self.database.create("./test/db.sqlite3")
         self.database.loda_data_and_add("./test/Action/test_csv_action.csv")
         user: list[dict] = self.database.get_data_by_telefone_number("612660796")
-        self.action: User = User(self.database, user)
+        self.action: User_action = User_action(self.database, user)
 
     def test_print_children(self):
         result: list[dict] = self.action.print_children()

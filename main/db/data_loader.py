@@ -3,7 +3,7 @@ import sys
 
 sys.path.append("./")
 from pathlib import Path
-from main.db.file_type import csv_loader
+from main.db.file_type import csv_loader, type_interface
 
 from main.db.file_type import json_loader
 
@@ -17,6 +17,12 @@ class data_loader:
             ".json": json_loader.Json_Loader(),
             ".xml": xml_loader.Xml_Loader(),
         }
+
+    def add_file_type(self, file_type: str, file_loader: type_interface) -> None:
+        self.file_type[file_type] = file_loader
+
+    def del_file_type(self, file_type: str) -> None:
+        del self.file_type[file_type]
 
     def file_load(self, path: str) -> list[dict]:
         try:

@@ -6,7 +6,7 @@ from pandas import DataFrame
 from main.db.db import DB
 
 
-class User:
+class User_action:
     def __init__(self, db: DB, user: list):
         self.dataBase: DB = db
         self.users: list[dict] = self.dataBase.get_data()
