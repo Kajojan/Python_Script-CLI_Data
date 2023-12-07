@@ -68,7 +68,10 @@ class TestMyModule(unittest.TestCase):
                 "password": "4^8(Oj52C+",
                 "role": "admin",
                 "created_at": "2023-05-15 21:57:02",
-                "children": None,
+                "children": [
+                    {"age": "11", "name": "Rebecca"},
+                    {"age": "17", "name": "Christie"},
+                ],
             }
         ]
 

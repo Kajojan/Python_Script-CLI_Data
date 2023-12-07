@@ -9,7 +9,9 @@ class TestMyModule(unittest.TestCase):
         self.database.remove("./test/db.sqlite3")
         self.database.create("./test/db.sqlite3")
         self.database.loda_data_and_add("./test/Action/test_csv_action.csv")
-        self.action: Admin_action = Admin_action(self.database)
+        self.action: Admin_action = Admin_action(
+            self.database, self.database.get_data_by_telefone_number("612660796")
+        )
 
     def test_print_all_accounts(self):
         result: int = self.action.prtint_all_accounts()
@@ -19,17 +21,9 @@ class TestMyModule(unittest.TestCase):
     def test_print_oldest_account(self):
         result: dict = self.action.print_oldest_account()
         expected_result = {
-            "id": 2,
-            "firstname": "Don",
-            "telephone_number": "123456789",
-            "email": "tamara@example.com",
-            "role": "admin",
+            "name": "Don",
+            "email_address": "tamara@example.com",
             "created_at": "2023-07-23 23:27:09",
-            "children": [
-                {"name": "Judith", "age": 1},
-                {"name": "Michael", "age": 12},
-                {"name": "Theresa", "age": 6},
-            ],
         }
 
         self.assertEqual(result, expected_result)
