@@ -3,7 +3,7 @@ import json
 
 
 class Json_Loader(Loder):
-    def load(self, file) -> object:
+    def load(self, file: str) -> list[dict]:
         with open(file) as jsonfile:
             self.data = json.load(jsonfile)
         return self.data

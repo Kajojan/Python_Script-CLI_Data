@@ -1,23 +1,24 @@
 import sqlite3
 import json
+import os
+from typing import List, Any
 
-from main.db.data_loader import *
 import bcrypt
 
 
 class DB_manager:
-    def __init__(self):
+    def __init__(self) -> None:
         self.conn = None
         self.cursor = None
 
-    def connect(self, db_path: str):
-        self.conn = sqlite3.connect(db_path)
-        self.cursor = self.conn.cursor()
+    def connect(self, db_path: str) -> None:
+        self.conn: sqlite3.Connection = sqlite3.connect(db_path)
+        self.cursor: sqlite3.Cursor = self.conn.cursor()
 
     def create_db(self, db_path: str):
         self.conn = sqlite3.connect(db_path, check_same_thread=False)
         self.cursor = self.conn.cursor()
-        create_table_query = """
+        create_table_query: str = """
             CREATE TABLE IF NOT EXISTS Users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             firstname TEXT,
@@ -29,7 +30,7 @@ class DB_manager:
             parent_id INTEGER,
             FOREIGN KEY (parent_id) REFERENCES Users(id)
         );"""
-        create_children_table_query = """
+        create_children_table_query: str = """
         CREATE TABLE IF NOT EXISTS Children (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
@@ -43,7 +44,7 @@ class DB_manager:
 
         self.conn.commit()
 
-    def add_to_database(self, data):
+    def add_to_database(self, data: list[dict]):
         for user_data in data:
             self.cursor.execute(
                 """
@@ -59,7 +60,7 @@ class DB_manager:
                     user_data["created_at"],
                 ),
             )
-            user_id = self.cursor.lastrowid
+            user_id: object = self.cursor.lastrowid
             if "children" in user_data and isinstance(user_data["children"], list):
                 for child in user_data["children"]:
                     self.cursor.execute(
@@ -72,7 +73,7 @@ class DB_manager:
 
         self.conn.commit()
 
-    def get_data_from_database(self):
+    def get_data_from_database(self) -> list[dict]:
         self.cursor.execute(
             """
             SELECT Users.id, Users.firstname, Users.telephone_number, Users.email, Users.role, Users.created_at,
@@ -83,12 +84,12 @@ class DB_manager:
             GROUP BY Users.id;
         """
         )
-        data = self.cursor.fetchall()
-        results = self.to_json(data)
+        data: list = self.cursor.fetchall()
+        results: list[dict] = self.to_json(data)
 
         return results
 
-    def get_other_children(self, age, user_id):
+    def get_other_children(self, age: int, user_id: int) -> list:
         self.cursor.execute(
             """
             SELECT Users.firstname, Users.telephone_number,
@@ -107,16 +108,16 @@ class DB_manager:
                 user_id,
             ),
         )
-        data = self.cursor.fetchall()
+        data: list = self.cursor.fetchall()
 
         return data
 
-    def remove_from_database(self, id):
+    def remove_from_database(self, id: int) -> None:
         self.cursor.execute("DELETE FROM Users WHERE id = ?", (id,))
         self.cursor.execute("DELETE FROM Children WHERE user_id = ?", (id,))
         self.conn.commit()
 
-    def get_from_databse_by_id(self, id):
+    def get_from_databse_by_id(self, id: int) -> list[dict]:
         self.cursor.execute(
             """
             SELECT Users.id, Users.firstname, Users.telephone_number, Users.email, Users.role, Users.created_at,
@@ -129,11 +130,11 @@ class DB_manager:
         """,
             (id,),
         )
-        results = self.to_json(self.cursor.fetchall())
+        results: list[dict[str, list[Any] | Any]] = self.to_json(self.cursor.fetchall())
 
         return results
 
-    def get_from_databse_by_number(self, number):
+    def get_from_databse_by_number(self, number: str) -> list[dict]:
         self.cursor.execute(
             """
             SELECT Users.id, Users.firstname, Users.telephone_number, Users.email, Users.role, Users.created_at,
@@ -147,14 +148,14 @@ class DB_manager:
             (number,),
         )
 
-        data = self.cursor.fetchone()
+        data: object = self.cursor.fetchone()
         results = None
-        if data != None:
+        if data is not None:
             results = self.to_json([data])
 
         return results
 
-    def get_from_databse_by_email(self, email):
+    def get_from_databse_by_email(self, email: str) -> List[dict]:
         self.cursor.execute(
             """
             SELECT Users.id, Users.firstname, Users.telephone_number, Users.email, Users.role, Users.created_at,
@@ -167,23 +168,23 @@ class DB_manager:
         """,
             (email,),
         )
-        data = self.cursor.fetchone()
+        data: object = self.cursor.fetchone()
         results = None
-        if data != None:
+        if data is not None:
             results = self.to_json([data])
 
         return results
 
-    def closeDb(self):
+    def closeDb(self) -> None:
         self.conn.close()
 
-    def hash_password(self, password):
+    def hash_password(self, password: str) -> bytes:
         return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
-    def is_hash_password(self, password, hash_password):
+    def is_hash_password(self, password: str, hash_password: bytes) -> bool:
         return bcrypt.checkpw(password.encode("utf-8"), hash_password)
 
-    def get_password(self, email_number):
+    def get_password(self, email_number: str) -> bytes:
         if "@" in email_number:
             self.cursor.execute(
                 """
@@ -203,19 +204,19 @@ class DB_manager:
                 (email_number,),
             )
 
-        data = self.cursor.fetchone()
-        if data != None:
+        data: List = self.cursor.fetchone()
+        if data is not None:
             return data[0]
 
         return None
 
-    def drop_db(self):
+    def drop_db(self) -> None:
         self.cursor.execute("DROP TABLE IF EXISTS Users;")
         self.cursor.execute("DROP TABLE IF EXISTS Children;")
         self.conn.commit()
         self.conn.close()
 
-    def remove(self, path):
+    def remove(self, path: str) -> None:
         try:
             os.remove(path)
         except FileNotFoundError:
@@ -223,7 +224,7 @@ class DB_manager:
         except Exception as e:
             raise e
 
-    def to_json(self, data):
+    def to_json(self, data: list) -> List[dict]:
         user_list = []
         for row in data:
             (

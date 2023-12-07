@@ -1,31 +1,37 @@
+from typing import  Any
+
 import pandas as pd
+from pandas import DataFrame
+
+from main.db.db import DB
+
 
 class Admin:
-    def __init__(self, db):
-        self.dataBase = db
-        self.users = self.dataBase.get_data()
+    def __init__(self, db: DB) -> None:
+        self.dataBase: DB = db
+        self.users: list[dict] = self.dataBase.get_data()
 
-    def prtint_all_accounts(self):
-        number_of_account = len(self.users)
+    def prtint_all_accounts(self) -> int:
+        number_of_account: int = len(self.users)
         return number_of_account
 
-    def print_oldest_account(self):
-        data = self.users
-        oldest = sorted(data, key=lambda user: user["created_at"])
+    def print_oldest_account(self) -> dict:
+        data: list[dict] = self.users
+        oldest: list[dict] = sorted(data, key=lambda user: user["created_at"])
         return oldest[0]
 
-    def group_by_age(self):
-        data = self.users
+    def group_by_age(self) -> dict:
+        data: list[dict] = self.users
         children = list(map(lambda x: x["children"], data))
         children = [item for row in children for item in row]
         children.sort(key=lambda x: x["age"])
-        df = pd.DataFrame(children)
-        grouped_children = (
+        df: DataFrame = pd.DataFrame(children)
+        grouped_children: Any = (
             df.groupby("age")
             .size()
             .reset_index(name="count")
             .sort_values(["count"], ascending=True)
         )
 
-        result = grouped_children.to_dict(orient="records")
+        result: dict = grouped_children.to_dict(orient="records")
         return result

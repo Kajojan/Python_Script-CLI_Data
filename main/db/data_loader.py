@@ -12,13 +12,13 @@ from main.db.file_type import xml_loader
 
 class data_loader:
     def __init__(self) -> None:
-        self.file_type = {
+        self.file_type: dict = {
             ".csv": csv_loader.CSV_Loader(),
             ".json": json_loader.Json_Loader(),
             ".xml": xml_loader.Xml_Loader(),
         }
 
-    def file_load(self, path: str):
+    def file_load(self, path: str) -> list[dict]:
         try:
             if Path(path).suffix in self.file_type:
                 return self.file_type[Path(path).suffix].load(path)
@@ -29,10 +29,10 @@ class data_loader:
         except Exception as e:
             raise e
 
-    def number(self, data: object):
+    def number(self, data: list[dict]) -> list[dict]:
         valid_data = []
         for index, user in enumerate(data):
-            if user["telephone_number"] != "" or user["telephone_number"] != None:
+            if user["telephone_number"] != "" or user["telephone_number"] is not None:
                 telephone_number = user["telephone_number"]
                 telephone_number = telephone_number.replace(" ", "")
 
@@ -50,7 +50,7 @@ class data_loader:
                     valid_data.append(user)
         return valid_data
 
-    def email(self, data: object):
+    def email(self, data: list[dict]) -> list[dict]:
         valid_data = []
         pattern = r"^[a-zA-Z0-9+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{1,4}$"
         for index, user in enumerate(data):
@@ -59,7 +59,7 @@ class data_loader:
 
         return valid_data
 
-    def validation(self, data: object):
+    def validation(self, data: list[dict]) -> list[dict]:
         numbers = self.number(data)
         email = self.email(numbers)
         return email
