@@ -1,24 +1,23 @@
 import unittest
 from main.db.db import DB
-from main.Login.Login import Login
 from main.actions.admin_action import Admin
 
 
 class TestMyModule(unittest.TestCase):
     def setUp(self) -> None:
-        self.database = DB()
+        self.database: DB = DB()
         self.database.remove("./test/db.sqlite3")
         self.database.create("./test/db.sqlite3")
         self.database.loda_data_and_add("./test/Action/test_csv_action.csv")
-        self.action = Admin(self.database)
+        self.action: Admin = Admin(self.database)
 
     def test_print_all_accounts(self):
-        result = self.action.prtint_all_accounts()
-        expected_result = 2
+        result: int = self.action.prtint_all_accounts()
+        expected_result: int = 2
         self.assertEqual(result, expected_result)
 
     def test_print_oldest_account(self):
-        result = self.action.print_oldest_account()
+        result: dict = self.action.print_oldest_account()
         expected_result = {
             "id": 2,
             "firstname": "Don",
@@ -36,7 +35,7 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(result, expected_result)
 
     def test_group_by_age(self):
-        result = self.action.group_by_age()
+        result: dict = self.action.group_by_age()
         expected_result = [
             {"age": 1, "count": 2},
             {"age": 6, "count": 2},

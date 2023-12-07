@@ -10,14 +10,16 @@ from main.db.db_manager import DB_manager
 
 class TestMyModule(unittest.TestCase):
     def setUp(self):
-        self.loader_manager = data_loader()
+        self.loader_manager: data_loader = data_loader()
 
     def test_load_file_not_found(self):
         with self.assertRaises(FileNotFoundError):
             self.loader_manager.file_load("file")
 
     def test_load_files_json(self):
-        result_json = self.loader_manager.file_load("test/db/fake_data/test_file.json")
+        result_json: list[dict] = self.loader_manager.file_load(
+            "test/db/fake_data/test_file.json"
+        )
 
         expected_result = [
             {
@@ -33,7 +35,9 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(result_json, expected_result)
 
     def test_load_files_csv(self):
-        result_csv = self.loader_manager.file_load("test/db/fake_data/test_file.csv")
+        result_csv: list[dict] = self.loader_manager.file_load(
+            "test/db/fake_data/test_file.csv"
+        )
         expected_result = [
             {
                 "firstname": "Don",
@@ -53,7 +57,9 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(result_csv, expected_result)
 
     def test_load_files_xml(self):
-        result_mxl = self.loader_manager.file_load("test/db/fake_data/test_file.xml")
+        result_mxl: list[dict] = self.loader_manager.file_load(
+            "test/db/fake_data/test_file.xml"
+        )
         expected_result = [
             {
                 "firstname": "Russell",
@@ -69,7 +75,7 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(result_mxl, expected_result)
 
     def test_validation_number(self):
-        result_csv = self.loader_manager.number(
+        result_csv: list[dict] = self.loader_manager.number(
             self.loader_manager.file_load("test/db/fake_data/test_file validation.csv")
         )
         result = [
@@ -109,7 +115,7 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(result_csv, result)
 
     def test_validation_email(self):
-        result_csv = self.loader_manager.email(
+        result_csv: list[dict] = self.loader_manager.email(
             self.loader_manager.file_load("test/db/fake_data/test_file validation.csv")
         )
         result = [
@@ -133,7 +139,7 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(result_csv, result)
 
     def test_validation(self):
-        result_csv = self.loader_manager.validation(
+        result_csv: list[dict] = self.loader_manager.validation(
             self.loader_manager.file_load("test/db/fake_data/test_file validation.csv")
         )
         result = [
@@ -151,16 +157,16 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(result_csv, result)
 
     def test_create_db(self):
-        db_path = "./test/db.sqlite3"
-        dataBase = DB_manager()
+        db_path: str = "./test/db.sqlite3"
+        dataBase: DB_manager = DB_manager()
 
         dataBase.create_db(db_path)
 
         self.assertTrue(os.path.exists(db_path))
 
     def test_add_receive_delete_from_db(self):
-        db_path = "./test/db.sqlite3"
-        dataBase = DB_manager()
+        db_path: str = "./test/db.sqlite3"
+        dataBase: DB_manager = DB_manager()
         dataBase.remove(db_path)
         dataBase.create_db(db_path)
 
@@ -185,7 +191,7 @@ class TestMyModule(unittest.TestCase):
             },
         ]
         dataBase.add_to_database(self.loader_manager.validation(data))
-        retrieved_data = dataBase.get_data_from_database()
+        retrieved_data: list[dict] = dataBase.get_data_from_database()
         data_expected = [
             {
                 "id": 1,
@@ -211,15 +217,15 @@ class TestMyModule(unittest.TestCase):
         dataBase.remove_from_database(1)
         dataBase.remove_from_database(2)
 
-        retrieved_data = dataBase.get_data_from_database()
+        retrieved_data: list[dict] = dataBase.get_data_from_database()
         expectedData = []
 
         self.assertEqual(expectedData, retrieved_data)
         dataBase.drop_db()
 
     def test_get_from_db_by_it(self):
-        db_path = "./test/db.sqlite3"
-        dataBase = DB_manager()
+        db_path: str = "./test/db.sqlite3"
+        dataBase: DB_manager = DB_manager()
         dataBase.remove(db_path)
         dataBase.create_db(db_path)
         data = [
@@ -234,7 +240,7 @@ class TestMyModule(unittest.TestCase):
             }
         ]
         dataBase.add_to_database(self.loader_manager.validation(data))
-        retrieved_data = dataBase.get_from_databse_by_id(1)
+        retrieved_data: list[dict] = dataBase.get_from_databse_by_id(1)
         data_expected = [
             {
                 "id": 1,
@@ -247,8 +253,10 @@ class TestMyModule(unittest.TestCase):
             }
         ]
 
-        email_data = dataBase.get_from_databse_by_email("opoole@example.org")
-        telephone_data = dataBase.get_from_databse_by_number("678762794")
+        email_data: list[dict] = dataBase.get_from_databse_by_email(
+            "opoole@example.org"
+        )
+        telephone_data: list[dict] = dataBase.get_from_databse_by_number("678762794")
 
         dataBase.remove_from_database(1)
 
@@ -259,8 +267,8 @@ class TestMyModule(unittest.TestCase):
         self.assertEqual(telephone_data, data_expected)
 
     def test_get_password(self):
-        db_path = "./test/db.sqlite3"
-        dataBase = DB_manager()
+        db_path: str = "./test/db.sqlite3"
+        dataBase: DB_manager = DB_manager()
         dataBase.remove(db_path)
         dataBase.create_db(db_path)
         data = [
@@ -275,9 +283,9 @@ class TestMyModule(unittest.TestCase):
             }
         ]
         dataBase.add_to_database(self.loader_manager.validation(data))
-        get_by_number = dataBase.get_password("678762794")
-        get_by_emial = dataBase.get_password("opoole@example.org")
-        get_None = dataBase.get_password("123")
+        get_by_number: bytes = dataBase.get_password("678762794")
+        get_by_emial: bytes = dataBase.get_password("opoole@example.org")
+        get_None: bytes = dataBase.get_password("123")
         self.assertEqual(get_None, None)
         self.assertIsNotNone(get_by_number)
         self.assertIsNotNone(get_by_emial)
