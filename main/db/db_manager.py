@@ -1,6 +1,7 @@
 import sqlite3
 import json
 import os
+from datetime import datetime
 from typing import List, Any
 
 import bcrypt
@@ -22,8 +23,8 @@ class DB_manager:
             CREATE TABLE IF NOT EXISTS Users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             firstname TEXT,
-            telephone_number TEXT,
-            email TEXT,
+            telephone_number TEXT UNIQUE,
+            email TEXT UNIQUE,
             password TEXT,
             role TEXT,
             created_at DATETIME,
@@ -46,32 +47,76 @@ class DB_manager:
 
     def add_to_database(self, data: list[dict]):
         for user_data in data:
-            self.cursor.execute(
-                """
-            INSERT INTO Users (firstname, telephone_number, email, password, role, created_at)
-            VALUES (?, ?, ?, ?, ?, ?)
-            """,
-                (
-                    user_data["firstname"],
-                    user_data["telephone_number"],
-                    user_data["email"],
-                    self.hash_password(user_data["password"]),
-                    user_data["role"],
-                    user_data["created_at"],
-                ),
-            )
-            user_id: object = self.cursor.lastrowid
-            if "children" in user_data and isinstance(user_data["children"], list):
-                for child in user_data["children"]:
+            try:
+                self.cursor.execute(
+                    """
+                INSERT INTO Users (firstname, telephone_number, email, password, role, created_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                    (
+                        user_data["firstname"],
+                        user_data["telephone_number"],
+                        user_data["email"],
+                        self.hash_password(user_data["password"]),
+                        user_data["role"],
+                        user_data["created_at"],
+                    ),
+                )
+                user_id: object = self.cursor.lastrowid
+                if "children" in user_data and isinstance(user_data["children"], list):
+                    for child in user_data["children"]:
+                        self.cursor.execute(
+                            """
+                            INSERT INTO Children (user_id, name, age)
+                            VALUES (?, ?, ?)
+                        """,
+                            (user_id, child["name"], child["age"]),
+                        )
+
+                self.conn.commit()
+            except:
+                # i think timestamp is a created_at value if not we could delete lines from 81 to 83, then you would add new account based on loading file
+
+                other_user = self.get_from_databse_by_number(
+                    user_data["telephone_number"]
+                )[0]
+                date_time1 = datetime.strptime(
+                    other_user["created_at"], "%Y-%m-%d %H:%M:%S"
+                )
+                date_time2 = datetime.strptime(
+                    user_data["created_at"], "%Y-%m-%d %H:%M:%S"
+                )
+                if date_time1 > date_time2:
+                    print("zmiana")
+                    self.remove_from_database(other_user["id"])
                     self.cursor.execute(
                         """
-                        INSERT INTO Children (user_id, name, age)
-                        VALUES (?, ?, ?)
+                    INSERT INTO Users (firstname, telephone_number, email, password, role, created_at)
+                    VALUES (?, ?, ?, ?, ?, ?)
                     """,
-                        (user_id, child["name"], child["age"]),
+                        (
+                            user_data["firstname"],
+                            user_data["telephone_number"],
+                            user_data["email"],
+                            self.hash_password(user_data["password"]),
+                            user_data["role"],
+                            user_data["created_at"],
+                        ),
                     )
+                    user_id: object = self.cursor.lastrowid
+                    if "children" in user_data and isinstance(
+                        user_data["children"], list
+                    ):
+                        for child in user_data["children"]:
+                            self.cursor.execute(
+                                """
+                                INSERT INTO Children (user_id, name, age)
+                                VALUES (?, ?, ?)
+                            """,
+                                (user_id, child["name"], child["age"]),
+                            )
 
-        self.conn.commit()
+                    self.conn.commit()
 
     def get_data_from_database(self) -> list[dict]:
         self.cursor.execute(
