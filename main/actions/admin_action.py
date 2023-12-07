@@ -18,7 +18,12 @@ class Admin_action(User_action):
     def print_oldest_account(self) -> dict:
         data: list[dict] = self.users
         oldest: list[dict] = sorted(data, key=lambda user: user["created_at"])
-        return oldest[0]
+        result = {
+            "name": oldest[0]["firstname"],
+            "email_address": oldest[0]["email"],
+            "created_at": oldest[0]["created_at"],
+        }
+        return result
 
     def group_by_age(self) -> dict:
         data: list[dict] = self.users
