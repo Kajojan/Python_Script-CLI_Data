@@ -1,21 +1,99 @@
 import unittest
-from main.db.db import DB
-from skrypt import Skrypt
+from unittest.mock import patch
+from io import StringIO
+
+from script import Script
 
 
-class TestMyModule(unittest.TestCase):
+class TestSkrypt(unittest.TestCase):
     def setUp(self):
-        self.database: DB = DB()
-        self.database.create("./test/db.sqlite3")
-        self.database.loda_data_and_add("./test/skrypt/test_csv_skrypt.csv")
-        self.skrypt: Skrypt = Skrypt()
-        self.skrypt.create_database()
+        self.script = Script("./db.sqlite3")
 
-    def test_successfull_login(self):
-        number: str = "612660796"
-        password: str = "jQ66IIlR*1"
-        result: dict = self.skrypt.login(number, password)
-        self.assertTrue(result["status"])
+    def test_valid_login(self):
+        simulated_args = [
+            "--login",
+            "604020303",
+            "--password",
+            "6mKY!nP^+y",
+            "print-all-accounts",
+        ]
+        with patch("sys.argv", ["your_script.py"] + simulated_args):
+            with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+                self.script.main()
+        expected_output = "79"
+        self.assertIn(expected_output, mock_stdout.getvalue())
+
+    def test_invalid_login(self):
+        simulated_args = [
+            "--login",
+            "1233333333333333",
+            "--password",
+            "password",
+            "print-all-accounts",
+        ]
+        with patch("sys.argv", ["your_script.py"] + simulated_args):
+            with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+                self.script.main()
+        expected_output = "Valid Login- Not Valid telephone number"
+        self.assertIn(expected_output, mock_stdout.getvalue())
+
+    def test_invalid_email(self):
+        simulated_args = [
+            "--login",
+            "a.@pl",
+            "--password",
+            "password",
+            "print-all-accounts",
+        ]
+        with patch("sys.argv", ["your_script.py"] + simulated_args):
+            with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+                self.script.main()
+        expected_output = "Valid Login- Not Valid email"
+        self.assertIn(expected_output, mock_stdout.getvalue())
+
+    def test_invalid_password(self):
+        simulated_args = [
+            "--login",
+            "604020303",
+            "--password",
+            "password_wrong",
+            "print-all-accounts",
+        ]
+        with patch("sys.argv", ["your_script.py"] + simulated_args):
+            with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+                self.script.main()
+        expected_output = "Valid Login- Wrong password"
+        self.assertIn(expected_output, mock_stdout.getvalue())
+
+    def test_user_not_found(self):
+        simulated_args = [
+            "--login",
+            "123456789",
+            "--password",
+            "6mKY!nP^+y",
+            "print-all-accounts",
+        ]
+        with patch("sys.argv", ["your_script.py"] + simulated_args):
+            with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+                self.script.main()
+
+        expected_output = "Valid Login- User Not Found"
+        self.assertIn(expected_output, mock_stdout.getvalue())
+
+    def test_no_access_to_command(self):
+        simulated_args = [
+            "--login",
+            "203818382",
+            "--password",
+            "gk2VM$qk@S",
+            "group-by-age",
+        ]
+        with patch("sys.argv", ["your_script.py"] + simulated_args):
+            with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+                self.script.main()
+
+        expected_output = "permission denied:  you are allow to use  print-children or find-similar-children-by-age "
+        self.assertIn(expected_output, mock_stdout.getvalue())
 
 
 if __name__ == "__main__":
