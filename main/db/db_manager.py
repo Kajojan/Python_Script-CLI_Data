@@ -87,7 +87,6 @@ class DB_manager:
                     user_data["created_at"], "%Y-%m-%d %H:%M:%S"
                 )
                 if date_time1 > date_time2:
-                    print("zmiana")
                     self.remove_from_database(other_user["id"])
                     self.cursor.execute(
                         """
