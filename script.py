@@ -94,7 +94,7 @@ class Script:
                     "permission denied:  you are allow to use  print-children or find-similar-children-by-age "
                 )
         else:
-            print(f"Valid Login- {data['message']}")
+            print(f"InValid Login- {data['message']}")
 
     def through_path(self, path):
         try:
