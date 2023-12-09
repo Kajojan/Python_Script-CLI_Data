@@ -1,4 +1,2 @@
-pandas==latest_version
-bcrypt==latest_version
-pytest==latest_version
-typing-extensions==latest_version
+pandas==2.1.4
+bcrypt
