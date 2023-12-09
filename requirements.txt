@@ -1,2 +1,2 @@
 pandas==2.1.4
-bcrypt
+bcrypt==4.1.1
