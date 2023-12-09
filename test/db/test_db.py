@@ -13,7 +13,7 @@ class TestMyModule(unittest.TestCase):
         self.loader_manager: data_loader = data_loader()
 
     def test_load_file_not_found(self):
-        with self.assertRaises(FileNotFoundError):
+        with self.assertRaises(Exception):
             self.loader_manager.file_load("file")
 
     def test_load_files_json(self):

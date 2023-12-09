@@ -1,3 +1,5 @@
+import os
+import subprocess
 import unittest
 from unittest.mock import patch
 from io import StringIO
@@ -7,7 +9,10 @@ from script import Script
 
 class TestSkrypt(unittest.TestCase):
     def setUp(self):
-        self.script = Script("./db.sqlite3")
+        self.script = Script("./test/skrypt/db.sqlite3")
+        if not os.path.exists("./test/skrypt/db.sqlite3"):
+            command = ["python3", "script.py", "create_database"]
+            subprocess.run(command, capture_output=True, text=True)
 
     def test_valid_login(self):
         simulated_args = [
@@ -17,7 +22,7 @@ class TestSkrypt(unittest.TestCase):
             "6mKY!nP^+y",
             "print-all-accounts",
         ]
-        with patch("sys.argv", ["your_script.py"] + simulated_args):
+        with patch("sys.argv", ["script.py"] + simulated_args):
             with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 self.script.main()
         expected_output = "79"
@@ -31,7 +36,7 @@ class TestSkrypt(unittest.TestCase):
             "password",
             "print-all-accounts",
         ]
-        with patch("sys.argv", ["your_script.py"] + simulated_args):
+        with patch("sys.argv", ["script.py"] + simulated_args):
             with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 self.script.main()
         expected_output = "InValid Login- Not Valid telephone number"
@@ -45,7 +50,7 @@ class TestSkrypt(unittest.TestCase):
             "password",
             "print-all-accounts",
         ]
-        with patch("sys.argv", ["your_script.py"] + simulated_args):
+        with patch("sys.argv", ["script.py"] + simulated_args):
             with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 self.script.main()
         expected_output = "InValid Login- Not Valid email"
@@ -59,7 +64,7 @@ class TestSkrypt(unittest.TestCase):
             "password_wrong",
             "print-all-accounts",
         ]
-        with patch("sys.argv", ["your_script.py"] + simulated_args):
+        with patch("sys.argv", ["script.py"] + simulated_args):
             with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 self.script.main()
         expected_output = "InValid Login- Wrong password"
@@ -73,7 +78,7 @@ class TestSkrypt(unittest.TestCase):
             "6mKY!nP^+y",
             "print-all-accounts",
         ]
-        with patch("sys.argv", ["your_script.py"] + simulated_args):
+        with patch("sys.argv", ["script.py"] + simulated_args):
             with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 self.script.main()
 
@@ -88,7 +93,7 @@ class TestSkrypt(unittest.TestCase):
             "gk2VM$qk@S",
             "group-by-age",
         ]
-        with patch("sys.argv", ["your_script.py"] + simulated_args):
+        with patch("sys.argv", ["script.py"] + simulated_args):
             with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 self.script.main()
 
