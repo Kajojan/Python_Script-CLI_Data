@@ -43,7 +43,11 @@ class Script:
         else:
             if os.path.exists(self.db_path):
                 self.dataBase.remove(self.db_path)
+            else:
+                self.dataBase = DB()
+
             self.dataBase.create(self.db_path)
+            self.is_login = Login(self.dataBase)
             print("creating database...")
             self.through_path("./main/db/data")
             sys.exit()
