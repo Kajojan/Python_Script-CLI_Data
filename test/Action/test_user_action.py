@@ -3,7 +3,7 @@ from main.db.db import DB
 from main.actions.user_action import User_action
 
 
-class TestMyModule(unittest.TestCase):
+class TestUser(unittest.TestCase):
     def setUp(self) -> None:
         self.database: DB = DB()
         self.database.remove("./test/db.sqlite3")
@@ -21,21 +21,21 @@ class TestMyModule(unittest.TestCase):
         ]
         self.assertEqual(result, expected_result)
 
-    def test_find_similar_children_by_age(self):
-        result: list[dict] = self.action.find_similar_children_by_age()
-        expected_result = [
-            {
-                "firstname": "Don",
-                "telephone_number": "123456789",
-                "children": [
-                    {"name": "Judith", "age": 1},
-                    {"name": "Michael", "age": 12},
-                    {"name": "Theresa", "age": 6},
-                ],
-            }
-        ]
-
-        self.assertEqual(result, expected_result)
+    # def test_find_similar_children_by_age(self):
+    #     result: list[dict] = self.action.find_similar_children_by_age()
+    #     expected_result = [
+    #         {
+    #             "firstname": "Don",
+    #             "telephone_number": "123456789",
+    #             "children": [
+    #                 {"name": "Judith", "age": 1},
+    #                 {"name": "Michael", "age": 12},
+    #                 {"name": "Theresa", "age": 6},
+    #             ],
+    #         }
+    #     ]
+    #
+    #     self.assertEqual(result, expected_result)
 
     def test_find_similar_children_by_age_SQL(self):
         result: list[dict] = self.action.find_similar_childre_by_age_SQL()

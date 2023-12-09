@@ -3,7 +3,7 @@ from main.db.db import DB
 from main.actions.admin_action import Admin_action
 
 
-class TestMyModule(unittest.TestCase):
+class TestAdmin(unittest.TestCase):
     def setUp(self) -> None:
         self.database: DB = DB()
         self.database.remove("./test/db.sqlite3")
