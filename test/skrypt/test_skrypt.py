@@ -34,7 +34,7 @@ class TestSkrypt(unittest.TestCase):
         with patch("sys.argv", ["your_script.py"] + simulated_args):
             with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 self.script.main()
-        expected_output = "Valid Login- Not Valid telephone number"
+        expected_output = "InValid Login- Not Valid telephone number"
         self.assertIn(expected_output, mock_stdout.getvalue())
 
     def test_invalid_email(self):
@@ -48,7 +48,7 @@ class TestSkrypt(unittest.TestCase):
         with patch("sys.argv", ["your_script.py"] + simulated_args):
             with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 self.script.main()
-        expected_output = "Valid Login- Not Valid email"
+        expected_output = "InValid Login- Not Valid email"
         self.assertIn(expected_output, mock_stdout.getvalue())
 
     def test_invalid_password(self):
@@ -62,7 +62,7 @@ class TestSkrypt(unittest.TestCase):
         with patch("sys.argv", ["your_script.py"] + simulated_args):
             with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 self.script.main()
-        expected_output = "Valid Login- Wrong password"
+        expected_output = "InValid Login- Wrong password"
         self.assertIn(expected_output, mock_stdout.getvalue())
 
     def test_user_not_found(self):
@@ -77,7 +77,7 @@ class TestSkrypt(unittest.TestCase):
             with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 self.script.main()
 
-        expected_output = "Valid Login- User Not Found"
+        expected_output = "InValid Login- User Not Found"
         self.assertIn(expected_output, mock_stdout.getvalue())
 
     def test_no_access_to_command(self):
