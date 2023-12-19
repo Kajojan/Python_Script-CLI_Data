@@ -49,7 +49,7 @@ class Script:
             self.dataBase.create(self.db_path)
             self.is_login = Login(self.dataBase)
             print("creating database...")
-            self.through_path("./main/db/data")
+            self.through_path("./main/db/data2")
             sys.exit()
 
         login = args.login
@@ -94,11 +94,10 @@ class Script:
 
                             print(res)
             except:
-                print(
-                    "permission denied:  you are allow to use  print-children or find-similar-children-by-age "
-                )
+                print("InValid Login")
+
         else:
-            print(f"InValid Login- {data['message']}")
+            print("InValid Login")
 
     def through_path(self, path):
         try:

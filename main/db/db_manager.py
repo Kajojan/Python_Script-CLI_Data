@@ -79,16 +79,21 @@ class DB_manager:
 
                 other_user = self.get_from_databse_by_number(
                     user_data["telephone_number"]
-                )[0]
-                date_time1 = datetime.strptime(
-                    other_user["created_at"], "%Y-%m-%d %H:%M:%S"
                 )
-                date_time2 = datetime.strptime(
-                    user_data["created_at"], "%Y-%m-%d %H:%M:%S"
-                )
-                if date_time1 > date_time2:
-                    self.remove_from_database(other_user["id"])
-                    self.cursor.execute(
+                if other_user is None:
+                    other_user = self.get_from_databse_by_email(
+                        user_data["email"]
+                    )
+                other_user=other_user[0]
+                # date_time1 = datetime.strptime(
+                #     other_user["created_at"], "%Y-%m-%d %H:%M:%S"
+                # )
+                # date_time2 = datetime.strptime(
+                #     user_data["created_at"], "%Y-%m-%d %H:%M:%S"
+                # )
+                # if date_time1 > date_time2:
+                self.remove_from_database(other_user["id"])
+                self.cursor.execute(
                         """
                     INSERT INTO Users (firstname, telephone_number, email, password, role, created_at)
                     VALUES (?, ?, ?, ?, ?, ?)
@@ -102,8 +107,8 @@ class DB_manager:
                             user_data["created_at"],
                         ),
                     )
-                    user_id: object = self.cursor.lastrowid
-                    if "children" in user_data and isinstance(
+                user_id: object = self.cursor.lastrowid
+                if "children" in user_data and isinstance(
                         user_data["children"], list
                     ):
                         for child in user_data["children"]:
@@ -115,7 +120,7 @@ class DB_manager:
                                 (user_id, child["name"], child["age"]),
                             )
 
-                    self.conn.commit()
+                self.conn.commit()
 
     def get_data_from_database(self) -> list[dict]:
         self.cursor.execute(

@@ -1,0 +1,19 @@
+firstname;telephone_number;email;password;role;created_at;children
+John;216003014;cortezmichael@example.net;RQpITnPo54pe;admin;2023-06-29 18:55:16;Bradley (14),Kimberly (11),John (11)
+Randy;(48)397359654;whitneyescobar@example.com;LrAJhJLbs5Oe;user;2023-02-17 02:56:42;Brad (11),Joshua (5),Victoria (11)
+Kelly;(48)909216438;mcdonaldalexander@example.comdd;nCNzZxq7QB1z;user;2023-08-07 22:40:17;Deanna (10)
+Kelly;(48)909216438;mcdonaldalexanddaser@example.com;nCNzZxq7QB1z;user;2023-08-07 22:40:18;Deanna (10)
+Christopher;216729360;gallaghertammy@example.net;MII3vYhWX6yj;admin;2022-12-09 20:13:13;Brandi (4)
+Christopher;(48)132992210;edaniels@example.net;t32tvunDPxM7;user;2023-06-13 05:43:48;Laurie (3),Jeff (10)
+Alexis;00147602224;othompson@example.com;D7bKnxnTuFeG;user;2023-08-18 20:28:04;Rhonda (6),Julie (13)
+Alexis;147602224;othompso@example.com;D7bKnxnTuFeG;user;2023-08-18 20:28:05;Rhonda (6),Julie (13)
+Brian;926800129;benjaminsosa@example.net;1TAdbHqD1dE5;admin;2022-12-26 11:27:39;Bob (4),Bruce (7)
+Megan;(48)897281186;randall55@example.net;BbQiUbsaAD8O;user;2023-06-07 17:10:39;Stephen (12)
+Megan;(48)897281143;randall55@example.net;BbQiUbsaAD8O;user;2023-06-07 16:10:39;Stephen (123)
+Candice;(48)328927131;johnsondiane@example.net;FiZ3WMSmQ2Ii;admin;2023-09-05 12:52:02;
+Oscar;00373034279;kellerregina@example.net;gpZ6mJzFR9r5;user;2023-02-04 14:02:35;Leah (13)
+Victoria;487562636;gmoore@example.net;3udGssVIsYhJ;user;2023-05-30 16:06:11;Mark (8),Vincent (12),Pam (13)
+Kristen;488766750;heather11@example.org;DOiOzIAkl5q4;user;2023-02-21 10:12:55;Anthony (8),Pamela (8)
+Samantha;;jonathan01@example.org;PR3ROBkmYF9R;user;2023-01-31 13:21:00;
+Yolanda;746888398;fergusonrebekah@example.com;sYoLxeC80xif;user;2023-02-08 10:27:23;Whitney (3),Timothy (7),Jason (2)
+David;00450267477;raymondlewis@example.org;haHVe5CpV1PK;user;2023-01-21 04:08:14;Crystal (8)
