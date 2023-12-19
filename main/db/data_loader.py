@@ -29,7 +29,7 @@ class data_loader:
             if Path(path).suffix in self.file_type:
                 return self.file_type[Path(path).suffix].load(path)
             else:
-                raise Exception (f"Suffix not found: {path}")
+                raise Exception(f"Suffix not found: {path}")
         except FileNotFoundError:
             raise FileNotFoundError(f"File not found: {path}")
         except Exception as e:
